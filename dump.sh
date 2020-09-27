@@ -3,20 +3,10 @@
 
 DUMP_URL=http://download.wikimedia.org/sawiki/latest/sawiki-latest-pages-articles.xml.bz2
 
+# Create a temp directory for intermediate files
 mkdir temp
 cd temp
 wget ${DUMP_URL}
-
-# Check if the dump file has changed
-if [ -f ../prev_checksum.txt ]
-then
-    md5sum sawiki-latest-pages-articles.xml.bz2 > curr_checksum.txt
-    diff ../prev_checksum.txt curr_checksum.txt >/dev/null 2>&1
-	if [ $? -eq 0 ]
-	then
-		exit
-	fi
-fi
 
 # Get WikiExtractor
 git clone https://github.com/attardi/wikiextractor.git
@@ -30,8 +20,8 @@ python wikiextractor/WikiExtractor.py -c -o sawiki --no_templates sawiki-latest-
 # Dump all the files into one XML file and zip
 find sawiki -name '*bz2' -exec bunzip2 -c {} \; > sawiki.xml
 zip ../sawiki.xml.zip sawiki.xml
-# Update checksum
-md5sum sawiki-latest-pages-articles.xml.bz2 > ../prev_checksum.txt
+
+# Cleanup
 cd ..
 rm -rf temp
 ls -lh
