@@ -2,15 +2,16 @@
 
 
 DUMP_URL=http://download.wikimedia.org/sawiki/latest/sawiki-latest-pages-articles.xml.bz2
+
+mkdir temp
+cd temp
 wget ${DUMP_URL}
 
-git checkout gh-pages
-mkdir -p output
 # Check if the dump file has changed
-if [ -f output/prev_checksum.txt ]
+if [ -f ../prev_checksum.txt ]
 then
     md5sum sawiki-latest-pages-articles.xml.bz2 > curr_checksum.txt
-    diff output/prev_checksum.txt curr_checksum.txt >/dev/null 2>&1
+    diff ../prev_checksum.txt curr_checksum.txt >/dev/null 2>&1
 	if [ $? -eq 0 ]
 	then
 		exit
@@ -28,7 +29,9 @@ cd -
 python wikiextractor/WikiExtractor.py -c -o sawiki --no_templates sawiki-latest-pages-articles.xml.bz2
 # Dump all the files into one XML file and zip
 find sawiki -name '*bz2' -exec bunzip2 -c {} \; > sawiki.xml
-zip output/sawiki.xml.zip sawiki.xml
+zip ../sawiki.xml.zip sawiki.xml
 # Update checksum
-md5sum sawiki-latest-pages-articles.xml.bz2 > output/prev_checksum.txt
-ls -lh output
+md5sum sawiki-latest-pages-articles.xml.bz2 > ../prev_checksum.txt
+cd ..
+rm -rf temp
+ls -lh
