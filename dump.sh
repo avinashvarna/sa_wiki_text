@@ -20,11 +20,13 @@ cd wikiextractor
 # Checkout the last commit that was working. 
 # See https://github.com/attardi/wikiextractor/issues/216#issuecomment-692529763
 git checkout e4abb4cbd019b0257824ee47c23dd163919b731b
+cd -
 # Run wikiextractor
-python WikiExtractor.py -c -o sawiki --no_templates sawiki-latest-pages-articles.xml.bz2
+python wikiextractor/WikiExtractor.py -c -o sawiki --no_templates sawiki-latest-pages-articles.xml.bz2
 # Dump all the files into one XML file and zip
 find sawiki -name '*bz2' -exec bunzip2 -c {} \; > sawiki.xml
 zip sawiki.xml.zip sawiki.xml
+ls -lh
 
 # Update checksum
 md5sum sawiki-latest-pages-articles.xml.bz2 > prev_checksum.txt
