@@ -1,0 +1,9 @@
+language: bash
+
+script:
+    - bash dump.sh
+
+deploy:
+  provider: pages:git
+  token: $GH_GUPTAPADAM
+  edge: true # opt in to dpl v2
