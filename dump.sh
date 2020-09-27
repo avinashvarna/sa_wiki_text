@@ -21,7 +21,7 @@ cd wikiextractor
 # See https://github.com/attardi/wikiextractor/issues/216#issuecomment-692529763
 git checkout e4abb4cbd019b0257824ee47c23dd163919b731b
 # Run wikiextractor
-python WikiExtractor.py -c -o sawiki --no-templates sawiki-latest-pages-articles.xml.bz2
+python WikiExtractor.py -c -o sawiki --no_templates sawiki-latest-pages-articles.xml.bz2
 # Dump all the files into one XML file and zip
 find sawiki -name '*bz2' -exec bunzip2 -c {} \; > sawiki.xml
 zip sawiki.xml.zip sawiki.xml
